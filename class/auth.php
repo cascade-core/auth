@@ -133,6 +133,16 @@ class Auth implements \IAuth
 				}
 			}
 
+			// Record last login time
+			\dibi::query('
+				UPDATE `T_User`
+				SET
+					`LastLogin` = NOW()
+				WHERE
+					`IDUser` = %s', $match['IDUser'], '
+				LIMIT 1
+			');
+
 			return true;
 		} else {
 			return false;
@@ -148,6 +158,65 @@ class Auth implements \IAuth
 				`IDUser` = %s', $id === false ? $this->user_info['IDUser'] : $id, '
 		');
 		$this->refresh_cookies($id, null);
+	}
+
+
+	public function create_account($user, & $error)
+	{
+		if (strpos($user['Mail'], '@') === false) {
+			$error = _('E-mail address must contain "@".');
+			return false;
+		}
+		if (empty($user['Name'])) {
+			$error = _('User name is required.');
+			return false;
+		}
+		if (empty($user['Password'])) {
+			$error = _('Password is required.');
+			return false;
+		}
+
+		\dibi::query('
+			INSERT IGNORE INTO `T_User`
+			SET
+				`Name`     = %s', $user['Name'], ',
+				`Mail`     = %s', $user['Mail'], ',
+				`Created`  = NOW(),
+				`Modified` = NOW()
+		');
+		if (\dibi::affectedRows() == 1) {
+			$id = \dibi::getInsertId();
+			$this->set_password($id, $user['Password']);
+			$error = null;
+			return $id;
+		} else {
+			$error = _('Failed to create user account.');
+			return false;
+		}
+	}
+
+	public function set_password($id, $password, $use_count = null)
+	{
+		if ($use_count == null) {
+			\dibi::query('
+				DELETE FROM `T_UserPassword`
+				WHERE
+					`IDUser`   = %s', $id, '
+					AND (`RemainingUses` IS NULL OR `RemainingUses` < 1)
+			');
+		}
+
+		\dibi::query('
+			INSERT IGNORE INTO `T_UserPassword`
+			SET
+				`IDUser`   = %s', $id, ',
+				`Created`  = NOW(),
+				`RemainingUses` = %iN', $use_count, ',
+				`Password` = SHA1(CONCAT(%s', $password, ', `IDUser`, UNIX_TIMESTAMP(`Created`)))
+		');
+
+		return \dibi::affectedRows();
+
 	}
 
 
