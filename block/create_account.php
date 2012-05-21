@@ -28,7 +28,7 @@
  * SUCH DAMAGE.
  */
 
-class M_auth__create_account extends Module
+class B_auth__create_account extends Block
 {
 	protected $inputs = array(
 		'user' => array(),

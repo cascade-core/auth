@@ -232,12 +232,6 @@ class Auth implements \IAuth
 	}
 
 
-	public function is_allowed($module_name, & $details = null)
-	{
-		return true;
-	}
-
-
 	private function refresh_cookies($id, $token)
 	{
 		$cookie_expire = strtotime('+1 year');
@@ -251,6 +245,26 @@ class Auth implements \IAuth
 	private function generate_token()
 	{
 		return sha1(time().mt_rand().serialize($_SERVER));
+	}
+
+
+	public function is_block_allowed($block_name, & $details = null)
+	{
+		return true;
+	}
+
+
+	// Level 2: Check permissions to specified item
+	public function check_item($block_name, & $item, & $details = null)
+	{
+		return false;	// not implemented yet.
+	}
+
+
+	// Level 2: Add permission conditions to query object (like adding where clause to sql query)
+	public function add_condition($block_name, & $query, $options = array())
+	{
+		return false;	// not implemented yet.
 	}
 
 };

@@ -28,7 +28,7 @@
  * SUCH DAMAGE.
  */
 
-class M_auth__show extends Module
+class B_auth__show extends Block
 {
 	protected $inputs = array(
 		'user' => array(),

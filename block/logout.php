@@ -28,7 +28,7 @@
  * SUCH DAMAGE.
  */
 
-class M_auth__logout extends Module
+class B_auth__logout extends Block
 {
 	protected $inputs = array(
 	);

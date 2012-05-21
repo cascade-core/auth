@@ -28,7 +28,7 @@
  * SUCH DAMAGE.
  */
 
-class M_auth__login extends Module
+class B_auth__login extends Block
 {
 	protected $inputs = array(
 		'mail' => array(),
