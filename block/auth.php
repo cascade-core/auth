@@ -43,8 +43,9 @@ class B_auth__auth extends Block
 
 	public function main()
 	{
+		$auth = $this->get_cascade_controller()->get_auth();
 
-		$id = $this->context->get_auth()->get_id();
+		$id = $auth->get_id();
 
 		if ($id == null) {
 			$this->out('anonymous', true);
@@ -52,7 +53,7 @@ class B_auth__auth extends Block
 		}
 
 		$this->out('id', $id);
-		$this->out('user', $this->context->get_auth()->get_info());
+		$this->out('user', $auth->get_info());
 		$this->out('done', true);
 	}
 }

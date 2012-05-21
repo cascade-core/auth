@@ -42,7 +42,7 @@ class B_auth__logout extends Block
 
 	public function main()
 	{
-		$this->context->get_auth()->logout();
+		$this->get_cascade_controller()->get_auth()->logout();
 		$this->out('done', true);
 	}
 }

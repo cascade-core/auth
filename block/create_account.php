@@ -46,10 +46,10 @@ class B_auth__create_account extends Block
 		$user = $this->in('user');
 		$error = null;
 
-		$id = $this->context->get_auth()->create_account($user, $error);
+		$id = $this->get_cascade_controller()->get_auth()->create_account($user, $error);
 
 		if ($id) {
-			$this->context->get_auth()->login($user['Mail'], $user['Password']);
+			$this->get_cascade_controller()->get_auth()->login($user['Mail'], $user['Password']);
 		}
 
 		$this->out('id', $id);

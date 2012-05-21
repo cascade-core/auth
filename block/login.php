@@ -47,7 +47,7 @@ class B_auth__login extends Block
 		$mail = $this->in('mail');
 		$password = $this->in('password');
 
-		$success = $this->context->get_auth()->login($mail, $password);
+		$success = $this->get_cascade_controller()->get_auth()->login($mail, $password);
 
 		$this->out('done', $success);
 	}
